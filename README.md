@@ -26,7 +26,7 @@ I almost keep default setting as described in the paper. For optimizer and learn
 - **SGD** optimizer with initial learning rate of 0.01. The learning rate is halved every 3 epochs.
 - **Adam** optimizer with initial learning rate of 0.001.
 
-Additionally, in the original model, 1 epoch is seen as a loop over batch_size*num_batch records (128*5000 or 128*10000 or 128*30000), so it means that there are records used more than once for 1 epoch. In my model, 1 epoch is a complete loop over the whole dataset, where each record is used exactly once.
+Additionally, in the original model, one epoch is seen as a loop over batch_size x num_batch records (128x5000 or 128x10000 or 128x30000), so it means that there are records used more than once for 1 epoch. In my model, 1 epoch is a complete loop over the whole dataset, where each record is used exactly once.
 
 ## Training
 
