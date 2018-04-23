@@ -30,11 +30,13 @@ Additionally, in the original model, one epoch is seen as a loop over batch_size
 
 ## Training
 
-If you want to train a model with common dataset and default parameters, please run the following commands:
+If you want to train a model with common dataset and default parameters, you could run:
 - **python train.py -d dataset_name**: For example, python train.py -d dbpedia
+
 If you want to train a model with common dataset and your preference parameters, like optimizer and learning rate, you could run:
 - **python train.py -d dataset_name -p optimizer_name -l learning_rate**: For example, python train.py -d dbpedia -p sgd -l 0.01
-If you want to train a model with your own dataset, please specify path to input and output folder:
+
+If you want to train a model with your own dataset, you need to specify the path to input and output folders:
 - **python train.py -i path/to/input/folder -o path/to/output/folder**
 
 ## Test
