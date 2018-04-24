@@ -48,6 +48,8 @@ You could find some trained models I have trained in [link](https://drive.google
 
 ## Experiments:
 
+I run experiments in 2 machines, one with NVIDIA TITAN X 12gb GPU and the other with NVIDIA quadro 6000 24gb GPU. For small and large models, you need about 1.6 gb GPU and 3.5 gb GPU respectively.
+
 Results for test set are presented as follows:  A(B)/C/D:
 - **A** is accuracy reproduced here.
 - **B** is accuracy reported in the paper.
