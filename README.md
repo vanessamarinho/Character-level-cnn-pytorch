@@ -58,9 +58,15 @@ Results for test set are presented as follows:  A(B)/C/D:
 
 Each experiment is run over 10 epochs.
 
-| Model scale |       ag_news    |     sogu_news    |     db_pedia     |   yelp_polarity  |    yelp_review   |   yahoo_answer   | amazon_review | amazon_polarity |
-|:-------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|
-|    Small    | 88.20(84.35)/A/4 | 94.95(91.35)/A/9 | 97.58(98.02)/A/8 |                  |                  | 67.55(70.16)/S/9 |                  |                  |
-|    Large    | 88.17(87.18)/A/2 | 95.48(95.12)/A/6 | 97.65(98.27)/A/7 | 94.21(94.11)/A/5 | 60.55(60.38)/S/5 |                  |                  |                  |
+| Model scale   |       Small    |     Large    |
+|:---------------:|:------------------:|:------------------:|
+|    ag_news    | 88.20(84.35)/A/4 | 88.17(87.18)/A/2 |
+|   sogu_news   | 94.95(91.35)/A/9 | 95.48(95.12)/A/6 |
+|    db_pedia   | 97.58(98.02)/A/8 | 97.65(98.27)/A/7 |
+| yelp_polarity |                  | 94.21(94.11)/A/5 |
+|  yelp_review  |                  | 60.55(60.38)/S/5 |
+|  yahoo_answer | 67.55(70.16)/S/9 | 68.87(70.45)/S/4 |
+| amazon_review |                  |                  |
+|amazon_polarity|                  |                  |
 
 You could find detail log of each experiment containing loss, accuracy and confusion matrix at the end of each epoch in **output/datasetname_scale/logs.txt**, for example output/ag_news_small/logs.txt
