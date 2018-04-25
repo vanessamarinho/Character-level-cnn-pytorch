@@ -58,7 +58,7 @@ Results for test set are presented as follows:  A(B)/C/D:
 
 Each experiment is run over 10 epochs.
 
-| Model scale   |       Small    |     Large    |
+|      Size     |       Small    |     Large    |
 |:---------------:|:------------------:|:------------------:|
 |    ag_news    | 88.20(84.35)/A/4 | 88.17(87.18)/A/2 |
 |   sogu_news   | 94.95(91.35)/A/9 | 95.48(95.12)/A/6 |
