@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Here is my pytorch implementation of the model described in the paper "Character-level Convolutional Networks for Text Classification" [paper](https://arxiv.org/abs/1509.01626). 
+Here is my pytorch implementation of the model described in the paper **Character-level Convolutional Networks for Text Classification** [paper](https://arxiv.org/abs/1509.01626). 
 
 ## Datasets:
 
