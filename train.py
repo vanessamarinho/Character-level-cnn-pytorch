@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader
 from torch.autograd import Variable
 
 from src.utils import *
-from src.dataset import MyDataset
+from src.dataset import GermanDataset
 from src.character_level_cnn import CharacterLevelCNN
 
 
@@ -28,10 +28,10 @@ def get_args():
     parser.add_argument("-b", "--batch_size", type=int, default=128)
     parser.add_argument("-n", "--num_epochs", type=int, default=10)
     parser.add_argument("-l", "--lr", type=float, default=0.001)  # recommended learning rate for sgd is 0.01, while for adam is 0.001
-    parser.add_argument("-g", "--gpu", action="store_true", default=True)
+    parser.add_argument("-g", "--gpu", action="store_true", default=False)
     parser.add_argument("-d", "--dataset", type=str,
                         choices=["agnews", "dbpedia", "yelp_review", "yelp_review_polarity", "amazon_review",
-                                 "amazon_polarity", "sogou_news", "yahoo_answers"], default="",
+                                 "amazon_polarity", "sogou_news", "yahoo_answers", "german"], default="german",
                         help="public dataset used for experiment. If this parameter is set, parameters input and output are ignored")
     parser.add_argument("-i", "--input", type=str, default="input", help="path to input folder")
     parser.add_argument("-o", "--output", type=str, default="output", help="path to output folder")
@@ -41,8 +41,11 @@ def get_args():
 
 def train(opt):
     if opt.dataset in ["agnews", "dbpedia", "yelp_review", "yelp_review_polarity", "amazon_review",
-                       "amazon_polarity", "sogou_news", "yahoo_answers"]:
+                       "amazon_polarity", "sogou_news", "yahoo_answers", "german"]:
         opt.input, opt.output = get_default_folder(opt.dataset, opt.feature)
+
+    if opt.dataset == "german":
+        opt.alphabet = u"abcdefghijklmnopqrstuvwxyz0123456789,;.!?:'\"/\\|_@#$%^&*~`+-=<>()[]{}äöüß"
 
     if not os.path.exists(opt.output):
         os.makedirs(opt.output)
@@ -55,8 +58,8 @@ def train(opt):
     test_params = {"batch_size": opt.batch_size,
                    "shuffle": False,
                    "num_workers": 0}
-    training_set = MyDataset(opt.input + os.sep + "train.csv", opt.input + os.sep + "classes.txt", opt.max_length)
-    test_set = MyDataset(opt.input + os.sep + "test.csv", opt.input + os.sep + "classes.txt", opt.max_length)
+    training_set = GermanDataset(opt.input + os.sep + "train.csv", opt.input + os.sep + "classes.txt", opt.max_length)
+    test_set = GermanDataset(opt.input + os.sep + "test.csv", opt.input + os.sep + "classes.txt", opt.max_length)
     training_generator = DataLoader(training_set, **training_params)
     test_generator = DataLoader(test_set, **test_params)
 
@@ -115,12 +118,12 @@ def train(opt):
         for batch in test_generator:
             _, n_true_label = batch
             if opt.gpu:
-                batch = [Variable(record, volatile=True).cuda() for record in batch]
+                batch = [Variable(record).cuda() for record in batch]
             else:
-                batch = [Variable(record, volatile=True) for record in batch]
+                batch = [Variable(record) for record in batch]
             t_data, _ = batch
             t_predicted_label = model(t_data)
-            t_predicted_label = F.softmax(t_predicted_label)
+            t_predicted_label = F.softmax(t_predicted_label, dim=1)
             test_prob.append(t_predicted_label)
             test_true.extend(n_true_label)
         test_prob = torch.cat(test_prob, 0)

@@ -11,14 +11,14 @@ from torch.utils.data import DataLoader
 from torch.autograd import Variable
 
 from src.utils import *
-from src.dataset import MyDataset
+from src.dataset import GermanDataset
 
 
 def get_args():
     parser = argparse.ArgumentParser(
         """Use pre-trained model to predict new data""")
     parser.add_argument("-b", "--batch_size", type=int, default=128)
-    parser.add_argument("-g", "--gpu", action="store_true", default=True)
+    parser.add_argument("-g", "--gpu", action="store_true", default=False)
     parser.add_argument("-i", "--input", type=str, default="inference/test.csv", help="path to input file")
     parser.add_argument("-p", "--trained_model", type=str, default="inference/trained_model",
                         help="path to pre-trained model")
@@ -31,7 +31,7 @@ def inference(opt):
     test_params = {"batch_size": opt.batch_size,
                    "shuffle": False,
                    "num_workers": 0}
-    test_set = MyDataset(opt.input)
+    test_set = GermanDataset(opt.input)
     test_generator = DataLoader(test_set, **test_params)
     model = torch.load(opt.trained_model)
     model.eval()
@@ -40,12 +40,12 @@ def inference(opt):
     for batch in test_generator:
         _, n_true_label = batch
         if opt.gpu:
-            batch = [Variable(record, volatile=True).cuda() for record in batch]
+            batch = [Variable(record).cuda() for record in batch]
         else:
-            batch = [Variable(record, volatile=True) for record in batch]
+            batch = [Variable(record) for record in batch]
         t_data, _ = batch
         t_predicted_label = model(t_data)
-        t_predicted_label = F.softmax(t_predicted_label)
+        t_predicted_label = F.softmax(t_predicted_label, dim=1)
         test_prob.append(t_predicted_label)
         test_true.extend(n_true_label)
     test_prob = torch.cat(test_prob, 0)

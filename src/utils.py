@@ -44,4 +44,7 @@ def get_default_folder(dataset, feature):
     elif dataset == "yahoo_answers":
         input = "input/yahoo_answers_csv"
         output = "output/yahoo_answers"
+    elif dataset == "german":
+        input = "input/german"
+        output = "output/german"
     return input, output + "_" + feature

@@ -9,25 +9,19 @@ from torch.utils.data import Dataset
 csv.field_size_limit(sys.maxsize)
 
 
-class MyDataset(Dataset):
+class GermanDataset(Dataset):
     def __init__(self, data_path, class_path=None, max_length=1014):
         self.data_path = data_path
-        self.vocabulary = list("""abcdefghijklmnopqrstuvwxyz0123456789,;.!?:'\"/\\|_@#$%^&*~`+-=<>()[]{}""")
+        # Include the german umlauts (Ä,Ö,Ü) and ligature (ß)
+        self.vocabulary = list(u"abcdefghijklmnopqrstuvwxyz0123456789,;.!?:'\"/\\|_@#$%^&*~`+-=<>()[]{}äöüß")
         self.identity_mat = np.identity(len(self.vocabulary))
         texts, labels = [], []
         with open(data_path) as csv_file:
-            reader = csv.reader(csv_file, quotechar='"')
+            reader = csv.reader(csv_file)
             for idx, line in enumerate(reader):
-                text = ""
-                for tx in line[1:]:
-                    text += tx
-                    text += " "
-                # if len(line) == 3:
-                #     text = "{} {}".format(line[1].lower(), line[2].lower())
-                # else:
-                #     text = "{}".format(line[1].lower())
-                label = int(line[0]) - 1
-                texts.append(text)
+                label = int(line[0])
+                # No need to decode the string in Python 3
+                texts.append(line[1])
                 labels.append(label)
         self.texts = texts
         self.labels = labels
@@ -41,6 +35,8 @@ class MyDataset(Dataset):
 
     def __getitem__(self, index):
         raw_text = self.texts[index]
+        # Original paper says it usually gives worse results when we distinguish between upper-case and lower-case
+        raw_text = raw_text.lower()
         data = np.array([self.identity_mat[self.vocabulary.index(i)] for i in list(raw_text) if i in self.vocabulary],
                         dtype=np.float32)
         if len(data) > self.max_length:
